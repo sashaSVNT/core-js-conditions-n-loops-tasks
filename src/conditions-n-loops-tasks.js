@@ -61,8 +61,14 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  if (queen.x === king.x || queen.y === king.y) {
+    return true;
+  }
+  if (Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -110,28 +116,32 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
-  // let dividedValue = num;
-  // let result = '';
-  // const romanNumbers = {
-  //   M: 1000,
-  //   D: 500,
-  //   C: 100,
-  //   L: 50,
-  //   X: 10,
-  //   V: 5,
-  //   I: 1,
-  // };
-  // for (let i = 0; i < 7; i += 1) {
-  //   const key = Object.keys(romanNumbers)[i];
-  //   const value = Math.floor(dividedValue / romanNumbers[key]);
-  //   for (let j = 0; j < value; j += 1) {
-  //     result += key;
-  //   }
-  //   dividedValue %= romanNumbers[key];
-  // }
-  // return result;
+function convertToRomanNumerals(num) {
+  let result = '';
+  let value = num;
+  const roman = [
+    'M',
+    'CM',
+    'D',
+    'CD',
+    'C',
+    'XC',
+    'L',
+    'XL',
+    'X',
+    'IX',
+    'V',
+    'IV',
+    'I',
+  ];
+  const romanValues = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  for (let i = 0; i < roman.length; i += 1) {
+    while (value >= romanValues[i]) {
+      result += roman[i];
+      value -= romanValues[i];
+    }
+  }
+  return result;
 }
 
 /**
@@ -260,15 +270,16 @@ function getIndexOf(str, letter) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  // const numToStr = num + '';
-  // for (let i = 0; i < numToStr.length; i+=1) {
-  //   if (numToStr[i] == digit) {
-  //     return true;
-  //   }
-  // }
-  // return false;
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  let number = num;
+  while (number > 0) {
+    const res = number % 10;
+    if (res === digit) {
+      return true;
+    }
+    number = Math.floor(number / 10);
+  }
+  return false;
 }
 
 /**
@@ -285,21 +296,17 @@ function isContainNumber(/* num, digit */) {
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
 function getBalanceIndex(arr) {
-  for (let mainIndex = 0; mainIndex < arr.length; mainIndex += 1) {
-    let leftSum = 0;
-    let rightSum = 0;
-    for (let leftIndex = 0; leftIndex < mainIndex; leftIndex += 1) {
-      leftSum += arr[leftIndex];
+  for (let i = 0; i < arr.length; i += 1) {
+    let leftBalance = 0;
+    let rightBalance = 0;
+    for (let l = 0; l < i; l += 1) {
+      leftBalance += arr[l];
     }
-    for (
-      let rightIndex = mainIndex + 1;
-      rightIndex < arr.length;
-      rightIndex += 1
-    ) {
-      rightSum += arr[rightIndex];
+    for (let r = i + 1; r < arr.length; r += 1) {
+      rightBalance += arr[r];
     }
-    if (leftSum === rightSum) {
-      return mainIndex;
+    if (leftBalance === rightBalance) {
+      return i;
     }
   }
   return -1;
@@ -345,16 +352,15 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
-  // const newMatrix = [];
-  // for (let i = 0; i < matrix.length; i += 1) {
-  //   newMatrix[i] = [];
-  //   for (let innerIndex = 0; innerIndex < matrix.length; innerIndex += 1) {
-  //     newMatrix[i][innerIndex] = matrix[matrix.length - (innerIndex + 1)][i];
-  //   }
-  // }
-  // return newMatrix;
+function rotateMatrix(matrix) {
+  const newMatrix = [];
+  for (let i = 0; i < matrix.length; i += 1) {
+    newMatrix[i] = [];
+    for (let innerIndex = 0; innerIndex < matrix.length; innerIndex += 1) {
+      newMatrix[i][innerIndex] = matrix[matrix.length - (innerIndex + 1)][i];
+    }
+  }
+  return newMatrix;
 }
 
 /**
@@ -409,14 +415,14 @@ function sortByAsc(arr) {
  */
 function shuffleChar(str, iterations) {
   let string = str;
-  for (let counter = iterations; counter > 0; counter -= 1) {
+  for (let i = 0; i < iterations; i += 1) {
     let prepend = '';
     let append = '';
-    for (let i = 0; i < string.length; i += 1) {
-      if (i % 2) {
-        append += string[i];
+    for (let j = 0; j < string.length; j += 1) {
+      if (j % 2 === 0) {
+        prepend += string[j];
       } else {
-        prepend += string[i];
+        append += string[j];
       }
     }
     string = prepend + append;
